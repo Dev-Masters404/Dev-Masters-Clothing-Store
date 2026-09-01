@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="topnav">
+    <a href="index.html" class="brand"><span class="hole"></span> The Store</a>
+    <div class="nav-links">
+      <a href="categories.html">Shop</a>
+      <a href="cart.html" class="cart-link">Cart <span class="count">0</span></a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="tag-mark"><span class="hole"></span> The Store · A tailored shopping experience</div>
+    <h1 class="headline">We dress you for you, not just anyone</h1>
+    <p>Before you start browsing, tell us who you're shopping for — so we can show you things that actually fit.</p>
+
+    <div class="age-picker" id="agePicker">
+      <button class="age-chip" data-age="kids"><span>Kids</span><small>Up to 12</small></button>
+      <button class="age-chip" data-age="teens"><span>Teens</span><small>13 - 19</small></button>
+      <button class="age-chip" data-age="youth"><span>Young Adults</span><small>20 - 35</small></button>
+      <button class="age-chip" data-age="adults"><span>Adults</span><small>36+</small></button>
+    </div>
+  </section>
+
+  <footer>The Store — Training / portfolio project</footer>
+
+  <script src="script.js"></script>
+  <script>
+    const agePicker = document.getElementById("agePicker");
+
+    const currentAge = getAgeGroup();
+    if (currentAge) {
+      const activeBtn = agePicker.querySelector(`[data-age="${currentAge}"]`);
+      if (activeBtn) activeBtn.classList.add("active");
+    }
+
+    agePicker.addEventListener("click", (e) => {
+      const btn = e.target.closest(".age-chip");
+      if (!btn) return;
+      setAgeGroup(btn.dataset.age);
+      window.location.href = "categories.html";
+    });
+  </script>
+</body>
+</html>

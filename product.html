@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product - The Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="topnav">
+    <a href="index.html" class="brand"><span class="hole"></span> The Store</a>
+    <div class="nav-links">
+      <a href="categories.html">Shop</a>
+      <a href="cart.html" class="cart-link">Cart <span class="count">0</span></a>
+    </div>
+  </nav>
+
+  <div id="productRoot"></div>
+
+  <footer>The Store — Training / portfolio project</footer>
+
+  <script src="script.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+    const product = getProductById(productId);
+    const root = document.getElementById("productRoot");
+
+    if (!product) {
+      root.innerHTML = `
+      
+        <div class="empty-state">
+          <div class="headline">Product not found</div>
+          <p><a href="categories.html" style="color:var(--tag)">Back to shop</a></p>
+        </div>`;
+    } else {
+      const catLabel = CATEGORIES.find((c) => c.id === product.category)?.label || product.category;
+
+      root.innerHTML = `
+        <div class="product-detail">
+
+            
+          <div class="detail-visual">
+            
+            <div class="frame1">
+    <img src="${product.image}" alt="${product.name}">
+                </div>
+          </div>
+   
+          <div class="detail-info">
+            <div class="cat-label">${catLabel}</div>
+            <h1 class="headline">${product.name}</h1>
+            <div class="price">${product.price} EGP</div>
+            <p class="desc">Part of the store's collection, available in multiple sizes. Pick a size and quantity, then add it to your cart.</p>
+
+            <div class="size-block">
+                
+              <div class="label">Choose a size</div>
+              <div class="size-options" id="sizeOptions">
+                ${product.sizes.map((s) => `<button class="size-btn" data-size="${s}">${s}</button>`).join("")}
+              </div>
+            </div>
+
+            
+
+            <div class="qty-block">
+              <span class="label">Quantity</span>
+              <div class="qty-control">
+                <button id="qtyMinus" type="button">−</button>
+                <span id="qtyValue">1</span>
+                <button id="qtyPlus" type="button">+</button>
+              </div>
+            </div>
+
+            <button class="btn-primary" id="addToCartBtn">Add to cart</button>
+            <div class="form-note" id="formNote"></div>
+          </div>
+        </div>`;
+
+      let selectedSize = null;
+      let qty = 1;
+
+      const sizeOptions = document.getElementById("sizeOptions");
+      const qtyValue = document.getElementById("qtyValue");
+      const formNote = document.getElementById("formNote");
+      const addBtn = document.getElementById("addToCartBtn");
+
+      sizeOptions.addEventListener("click", (e) => {
+        const btn = e.target.closest(".size-btn");
+        if (!btn) return;
+        sizeOptions.querySelectorAll(".size-btn").forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        selectedSize = btn.dataset.size;
+        formNote.textContent = "";
+        formNote.classList.remove("success");
+      });
+
+      document.getElementById("qtyMinus").addEventListener("click", () => {
+        qty = Math.max(1, qty - 1);
+        qtyValue.textContent = qty;
+      });
+      document.getElementById("qtyPlus").addEventListener("click", () => {
+        qty += 1;
+        qtyValue.textContent = qty;
+      });
+
+      addBtn.addEventListener("click", () => {
+        if (!selectedSize) {
+          formNote.textContent = "Please select a size first";
+          formNote.classList.remove("success");
+          return;
+        }
+        addToCart(product.id, selectedSize, qty);
+        renderCartBadge();
+        formNote.textContent = "Added to cart ✓";
+        formNote.classList.add("success");
+      });
+    }
+  </script>
+</body>
+</html>
