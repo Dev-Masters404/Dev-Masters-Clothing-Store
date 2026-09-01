@@ -73,7 +73,7 @@ const PRODUCTS = [
   {
     id: "p07",
     name: "Classic Oxford Shirt",
-    image: "images (5).jpg",
+    image: "images (4).jpg",
     category: "shirts",
     price: 520,
     ageGroups: ["youth", "adults"],
