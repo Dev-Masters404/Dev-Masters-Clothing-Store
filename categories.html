@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
@@ -18,9 +18,7 @@
     </div>
   </nav>
 
-  <!-- <div class="product-thumb">
-    <img src="${p.image}" alt="${p.name}">
-</div> -->
+ 
 
   <div class="page-head">
     <div>
@@ -91,10 +89,10 @@
         const card = document.createElement("a");
         card.href = `product.html?id=${p.id}`;
         card.className = "product-card";
-        card.innerHTML = `
+         card.innerHTML = `
           <div class="product-thumb"> 
     <img src="${p.image}" alt="${p.name}">
-            </div>
+            </div> 
           
           <div class="product-info">
             <div class="cat-label">${catLabel}</div>
@@ -115,6 +113,135 @@
     });
 
     renderGrid();
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop - The Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="topnav">
+    <a href="index.html" class="brand"><span class="hole"></span> <span data-i18n="brand">The Store</span></a>
+    <div class="nav-links">
+      <a href="categories.html" data-i18n="navShop">Shop</a>
+      <a href="cart.html" class="cart-link"><span data-i18n="navCart">Cart</span> <span class="count">0</span></a>
+      <button id="langToggle" class="icon-btn">EN</button>
+      <button id="themeToggle" class="icon-btn">☀</button>
+    </div>
+  </nav>
+
+  <div class="page-head">
+    <div>
+      <h2 class="headline" data-i18n="shopTitle">Choose your category</h2>
+      <p class="sub" id="ageNote"></p>
+    </div>
+  </div>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-chip active" data-cat="all" data-i18n="filterAll">All</button>
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+
+  <footer data-i18n="footer">The Store — Training / portfolio project</footer>
+
+  <script src="script.js"></script>
+  <script>
+    const filterBar = document.getElementById("filterBar");
+    const productGrid = document.getElementById("productGrid");
+    const ageNote = document.getElementById("ageNote");
+
+    let activeCategory = "all";
+
+    function renderFilterBar() {
+      filterBar.innerHTML = `<button class="filter-chip ${activeCategory === "all" ? "active" : ""}" data-cat="all">${TRANSLATIONS.filterAll[getLang()]}</button>`;
+      CATEGORIES.forEach((cat) => {
+        const chip = document.createElement("button");
+        chip.className = "filter-chip" + (activeCategory === cat.id ? " active" : "");
+        chip.dataset.cat = cat.id;
+        chip.textContent = t(cat);
+        filterBar.appendChild(chip);
+      });
+    }
+
+    function renderAgeNote() {
+      const ageGroup = getAgeGroup();
+      ageNote.innerHTML = "";
+      if (!ageGroup) return;
+      ageNote.append(`${TRANSLATIONS.ageNotePrefix[getLang()]} "${getAgeLabel(ageGroup)}". `);
+      const changeLink = document.createElement("a");
+      changeLink.href = "index.html";
+      changeLink.style.color = "var(--tag)";
+      changeLink.textContent = TRANSLATIONS.changeGroup[getLang()];
+      ageNote.appendChild(changeLink);
+    }
+
+    function getVisibleProducts() {
+      const ageGroup = getAgeGroup();
+      return PRODUCTS.filter((p) => {
+        const matchesAge = !ageGroup || p.ageGroups.includes(ageGroup);
+        const matchesCat = activeCategory === "all" || p.category === activeCategory;
+        return matchesAge && matchesCat;
+      });
+    }
+
+    function renderGrid() {
+      const items = getVisibleProducts();
+      productGrid.innerHTML = "";
+
+      if (items.length === 0) {
+        productGrid.style.display = "block";
+        productGrid.innerHTML = `
+          <div class="empty-state">
+            <div class="headline">${TRANSLATIONS.emptyTitle[getLang()]}</div>
+            <p>${TRANSLATIONS.emptyText[getLang()]}</p>
+          </div>`;
+        return;
+      }
+
+      productGrid.style.display = "grid";
+    items.forEach((p) => {
+  const thumbImage = getProductImage(p, p.colors[0]);
+  const card = document.createElement("a");
+  card.href = `product.html?id=${p.id}`;
+  card.className = "product-card";
+  card.style.position = "relative";
+  card.innerHTML = `
+    ${p.bestSeller ? `<span class="badge-best">${TRANSLATIONS.bestSeller[getLang()]}</span>` : ""}
+    <img class="product-thumb" src="${thumbImage}" alt="${p.name}">
+    <div class="product-info">
+      <div class="cat-label">${getCategoryLabel(p.category)}</div>
+      <h3>${p.name}</h3>
+      <div class="price">${p.price} EGP</div>
+    </div>`;
+  productGrid.appendChild(card);
+});
+    }
+
+    function renderAll() {
+      renderFilterBar();
+      renderAgeNote();
+      renderGrid();
+    }
+
+    filterBar.addEventListener("click", (e) => {
+      const chip = e.target.closest(".filter-chip");
+      if (!chip) return;
+      activeCategory = chip.dataset.cat;
+      renderAll();
+    });
+
+    document.addEventListener("app:languagechange", renderAll);
+    renderAll();
   </script>
 </body>
 </html>

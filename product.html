@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +11,18 @@
 <body>
 
   <nav class="topnav">
-    <a href="index.html" class="brand"><span class="hole"></span> The Store</a>
+    <a href="index.html" class="brand"><span class="hole"></span> <span data-i18n="brand">The Store</span></a>
     <div class="nav-links">
-      <a href="categories.html">Shop</a>
-      <a href="cart.html" class="cart-link">Cart <span class="count">0</span></a>
+      <a href="categories.html" data-i18n="navShop">Shop</a>
+      <a href="cart.html" class="cart-link"><span data-i18n="navCart">Cart</span> <span class="count">0</span></a>
+      <button id="langToggle" class="icon-btn">EN</button>
+      <button id="themeToggle" class="icon-btn">☀</button>
     </div>
   </nav>
 
   <div id="productRoot"></div>
 
-  <footer>The Store — Training / portfolio project</footer>
+  <footer data-i18n="footer">The Store — Training / portfolio project</footer>
 
   <script src="script.js"></script>
   <script>
@@ -29,61 +31,77 @@
     const product = getProductById(productId);
     const root = document.getElementById("productRoot");
 
-    if (!product) {
-      root.innerHTML = `
-      
-        <div class="empty-state">
-          <div class="headline">Product not found</div>
-          <p><a href="categories.html" style="color:var(--tag)">Back to shop</a></p>
-        </div>`;
-    } else {
-      const catLabel = CATEGORIES.find((c) => c.id === product.category)?.label || product.category;
+    let selectedSize = null;
+    let selectedColor = null;
+    let qty = 1;
+
+    function renderProduct() {
+      if (!product) {
+        root.innerHTML = `
+          <div class="empty-state">
+            <div class="headline">${TRANSLATIONS.productNotFound[getLang()]}</div>
+            <p><a href="categories.html" style="color:var(--tag)">${TRANSLATIONS.backToShop[getLang()]}</a></p>
+          </div>`;
+        return;
+      }
+
+      if (!selectedColor) selectedColor = product.colors[0];
 
       root.innerHTML = `
         <div class="product-detail">
-
-            
           <div class="detail-visual">
-            
-            <div class="frame1">
-    <img src="${product.image}" alt="${product.name}">
-                </div>
+            <div class="image-scroll" id="imageScroll">
+              ${product.colors.map((c) => `
+                <div class="scroll-item">
+                  <img src="${getProductImage(product, c)}" alt="${product.name} - ${c}">
+                </div>`).join("")}
+            </div>
+            <div class="scroll-dots">
+              ${product.colors.map((c) => `<span class="dot ${c === selectedColor ? "active" : ""}"></span>`).join("")}
+            </div>
           </div>
-   
           <div class="detail-info">
-            <div class="cat-label">${catLabel}</div>
+            <div class="cat-label">${getCategoryLabel(product.category)}</div>
             <h1 class="headline">${product.name}</h1>
             <div class="price">${product.price} EGP</div>
-            <p class="desc">Part of the store's collection, available in multiple sizes. Pick a size and quantity, then add it to your cart.</p>
+            <p class="desc">${TRANSLATIONS.productDesc[getLang()]}</p>
 
             <div class="size-block">
-                
-              <div class="label">Choose a size</div>
+              <div class="label">${TRANSLATIONS.chooseSize[getLang()]}</div>
               <div class="size-options" id="sizeOptions">
-                ${product.sizes.map((s) => `<button class="size-btn" data-size="${s}">${s}</button>`).join("")}
+                ${product.sizes.map((s) => `<button class="size-btn ${selectedSize === s ? "selected" : ""}" data-size="${s}">${s}</button>`).join("")}
               </div>
             </div>
 
-            
+            <div class="size-block">
+              <div class="label">${TRANSLATIONS.chooseColor[getLang()]}</div>
+              <div class="size-options" id="colorOptions">
+                ${product.colors.map((c) => `<button class="size-btn color-btn ${selectedColor === c ? "selected" : ""}" data-color="${c}">${getColorLabel(c)}</button>`).join("")}
+              </div>
+            </div>
 
             <div class="qty-block">
-              <span class="label">Quantity</span>
+              <span class="label">${TRANSLATIONS.quantity[getLang()]}</span>
               <div class="qty-control">
                 <button id="qtyMinus" type="button">−</button>
-                <span id="qtyValue">1</span>
+                <span id="qtyValue">${qty}</span>
                 <button id="qtyPlus" type="button">+</button>
               </div>
             </div>
 
-            <button class="btn-primary" id="addToCartBtn">Add to cart</button>
+            <button class="btn-primary" id="addToCartBtn">${TRANSLATIONS.addToCart[getLang()]}</button>
             <div class="form-note" id="formNote"></div>
           </div>
         </div>`;
 
-      let selectedSize = null;
-      let qty = 1;
+      const scrollEl = document.getElementById("imageScroll");
+      const colorIndex = product.colors.indexOf(selectedColor);
+      requestAnimationFrame(() => {
+        scrollEl.scrollTo({ left: colorIndex * scrollEl.clientWidth, behavior: "smooth" });
+      });
 
       const sizeOptions = document.getElementById("sizeOptions");
+      const colorOptions = document.getElementById("colorOptions");
       const qtyValue = document.getElementById("qtyValue");
       const formNote = document.getElementById("formNote");
       const addBtn = document.getElementById("addToCartBtn");
@@ -91,11 +109,17 @@
       sizeOptions.addEventListener("click", (e) => {
         const btn = e.target.closest(".size-btn");
         if (!btn) return;
-        sizeOptions.querySelectorAll(".size-btn").forEach((b) => b.classList.remove("selected"));
-        btn.classList.add("selected");
         selectedSize = btn.dataset.size;
         formNote.textContent = "";
-        formNote.classList.remove("success");
+        renderProduct();
+      });
+
+      colorOptions.addEventListener("click", (e) => {
+        const btn = e.target.closest(".color-btn");
+        if (!btn) return;
+        selectedColor = btn.dataset.color;
+        formNote.textContent = "";
+        renderProduct();
       });
 
       document.getElementById("qtyMinus").addEventListener("click", () => {
@@ -109,16 +133,19 @@
 
       addBtn.addEventListener("click", () => {
         if (!selectedSize) {
-          formNote.textContent = "Please select a size first";
+          formNote.textContent = TRANSLATIONS.selectSizeFirst[getLang()];
           formNote.classList.remove("success");
           return;
         }
-        addToCart(product.id, selectedSize, qty);
+        addToCart(product.id, selectedSize, selectedColor, qty);
         renderCartBadge();
-        formNote.textContent = "Added to cart ✓";
+        formNote.textContent = TRANSLATIONS.addedSuccess[getLang()];
         formNote.classList.add("success");
       });
     }
+
+    document.addEventListener("app:languagechange", renderProduct);
+    renderProduct();
   </script>
 </body>
 </html>
