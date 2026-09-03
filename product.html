@@ -97,7 +97,10 @@
       const scrollEl = document.getElementById("imageScroll");
       const colorIndex = product.colors.indexOf(selectedColor);
       requestAnimationFrame(() => {
-        scrollEl.scrollTo({ left: colorIndex * scrollEl.clientWidth, behavior: "smooth" });
+        const targetItem = scrollEl.children[colorIndex];
+        if (targetItem){
+            targetItem.scrollIntoView({behavior: "smooth", inline:"start", block:"nearest"});
+        }
       });
 
       const sizeOptions = document.getElementById("sizeOptions");
