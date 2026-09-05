@@ -11,9 +11,9 @@
 /* ---------- Category catalog (UI labels only) ---------- */
 const CATEGORIES = [
   { id: "jackets",  en: "Jackets",          ar: "جاكيتات" },
-  { id: "hoodies",  en: "Hoodies",          ar: "هوديز" },
   { id: "tshirts",  en: "T-Shirts",         ar: "تيشيرتات" },
   { id: "shirts",   en: "Shirts",           ar: "قمصان" },
+  { id: "hoodies",  en: "Hoodies",          ar: "هوديز" },
   { id: "jeans",    en: "Jeans",            ar: "جينز" },
   { id: "sneakers", en: "Sneakers",         ar: "كوتشيات" },
   { id: "football", en: "Football Jerseys", ar: "تيشيرتات كورة" },
@@ -49,6 +49,37 @@ const PRODUCTS = [
     colors: ["Black", "Olive"], bestSeller: true,
     images: { "Black": "images (28).jpg", "Olive": "images (29).jpg" },
   },
+  {
+  id: "p23", name: "Varsity Jacket", category: "jackets", price: 920,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Navy", "Red"],
+  images: { "Navy": "v1.jpg", "Red": "v2.jpg" },
+},
+{
+  id: "p24", name: "Windbreaker", category: "jackets", price: 680,
+  ageGroups: ["youth", "adults"], sizes: ["M", "L", "XL"],
+  colors: ["Black", "Blue"],
+  images: { "Black": "loose1.jpg", "Blue": "loose2.jpg" },
+},
+{
+  id: "p25", name: "Leather Jacket", category: "jackets", price: 1600,
+  ageGroups: ["adults"], sizes: ["M", "L", "XL"],
+  colors: ["Black"],
+  images: { "Black": "lea.jpg" },
+},
+
+{
+  id: "p27", name: "Kids Puffer Vest", category: "jackets", price: 420,
+  ageGroups: ["kids"], sizes: ["S", "M"],
+  colors: ["Blue"],
+  images: { "Blue": "vest.jpg" },
+},
+{
+  id: "p28", name: "Denim Trucker Jacket", category: "jackets", price: 780,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Blue"],
+  images: { "Blue": "tru.jpg" },
+},
 
   // Hoodies
   {
@@ -60,8 +91,8 @@ const PRODUCTS = [
   {
     id: "p16", name: "Zip-Up Hoodie", category: "hoodies", price: 540,
     ageGroups: ["youth", "adults"], sizes: ["M", "L", "XL"],
-    colors: ["Black", "Navy"], bestSeller: true,
-    images: { "Black": "images (33).jpg", "Navy": "images (32).jpg" },
+    colors: ["Navy","Black"], bestSeller: true,
+    images: { "Navy": "images (32).jpg" ,"Black": "images (33).jpg", },
   },
   {
     id: "p17", name: "Kids Hoodie", category: "hoodies", price: 320,
@@ -69,6 +100,32 @@ const PRODUCTS = [
     colors: ["Blue", "Red"],
     images: { "Blue": "images (34).jpg", "Red": "images (35).jpg" },
   },
+  {
+  id: "p43", name: "Oversized Hoodie", category: "hoodies", price: 560,
+  ageGroups: ["youth"], sizes: ["M", "L", "XL"],
+  colors: ["Grey","Black"],
+  images: { "Grey": "over1.jpg" ,"Black": "over2.jpg" },
+},
+
+{
+  id: "p45", name: "Fleece Hoodie", category: "hoodies", price: 500,
+  ageGroups: ["adults"], sizes: ["M", "L", "XL"],
+  colors: ["Navy","Grey", ],
+  images: {"Navy": "fle2.jpg","Grey": "fle1.jpg" ,  },
+},
+{
+  id: "p47", name: "Kids Character Hoodie", category: "hoodies", price: 340,
+  ageGroups: ["kids"], sizes: ["S", "M"],
+  colors: ["Red", "Blue"],
+  images: { "Red": "mario1.jpg", "Blue": "mario2.jpg" },
+},
+
+{
+  id: "p49", name: "Half-Zip Hoodie", category: "hoodies", price: 590,
+  ageGroups: ["youth", "adults"], sizes: ["M", "L", "XL"],
+  colors: ["Grey", "Navy"],
+  images: { "Grey": "zip2.jpg", "Navy": "zip1.jpg" },
+},
 
   // T-Shirts
   {
@@ -95,6 +152,36 @@ const PRODUCTS = [
     colors: ["Navy", "White"],
     images: { "Navy": "download (1).avif", "White": "images (37).jpg" },
   },
+  {
+  id: "p29", name: "Pocket Tee", category: "tshirts", price: 230,
+  ageGroups: ["kids", "teens", "youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["White", "Black"],
+  images: { "White": "po2.jpg", "Black": "po1.jpg" },
+},
+{
+  id: "p30", name: "Long Sleeve Tee", category: "tshirts", price: 270,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L"],
+  colors: ["Grey", "Navy"],
+  images: { "Grey": "long2.jpg", "Navy": "long1.jpg" },
+},
+{
+  id: "p31", name: "Tie-Dye Tee", category: "tshirts", price: 280,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L"],
+  colors: ["Multi"],
+  images: { "Multi": "multi.jpg" },
+},
+{
+  id: "p33", name: "Kids Cartoon Tee", category: "tshirts", price: 210,
+  ageGroups: ["kids"], sizes: ["S", "M"],
+  colors: ["Yellow", "Blue"],
+  images: { "Yellow": "dino2.jpg", "Blue": "dino1.jpg" },
+},
+{
+  id: "p34", name: "Henley Tee", category: "tshirts", price: 260,
+  ageGroups: ["youth", "adults"], sizes: ["M", "L", "XL"],
+  colors: [ "Black","Beige",],
+  images: {"Black": "tee1.jpg", "Beige": "tee2.jpg",  },
+},
 
   // Shirts
   {
@@ -109,6 +196,37 @@ const PRODUCTS = [
     colors: ["Red", "Green"],
     images: { "Red": "images (38).jpg", "Green": "images (39).jpg" },
   },
+  {
+  id: "p29", name: "Pocket Tee", category: "shirts", price: 230,
+  ageGroups: ["kids", "teens", "youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["White", "Black"],
+  images: { "White": "po2.jpg", "Black": "po1.jpg" },
+},
+{
+  id: "p30", name: "Long Sleeve Tee", category: "shirts", price: 270,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L"],
+  colors: ["Grey", "Navy"],
+  images: { "Grey": "long2.jpg", "Navy": "long1.jpg" },
+},
+{
+  id: "p31", name: "Tie-Dye Tee", category: "shirts", price: 280,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L"],
+  colors: ["Multi"],
+  images: { "Multi": "multi.jpg" },
+},
+
+{
+  id: "p33", name: "Kids Cartoon Tee", category: "shirts", price: 210,
+  ageGroups: ["kids"], sizes: ["S", "M"],
+  colors: ["Yellow", "Blue"],
+  images: { "Yellow": "dino2.jpg", "Blue": "dino1.jpg" },
+},
+{
+  id: "p34", name: "Henley Tee", category: "shirts", price: 260,
+  ageGroups: ["youth", "adults"], sizes: ["M", "L", "XL"],
+  colors: [ "Black","Beige",],
+  images: { "Black": "tee1.jpg", "Beige": "tee2.jpg",  },
+},
 
   // Jeans
   {
@@ -129,6 +247,48 @@ const PRODUCTS = [
     colors: ["Khaki", "Black"], bestSeller: true,
     images: { "Khaki": "images (17).jpg", "Black": "images (18).jpg" },
   },
+  {
+  id: "p50", name: "Straight Fit Jeans", category: "jeans", price: 720,
+  ageGroups: ["adults"], sizes: ["M", "L", "XL"],
+  colors: ["Dark Blue"],
+  images: {  "Dark Blue": "stra.jpg" },
+},
+{
+  id: "p51", name: "Ripped Jeans", category: "jeans", price: 680,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L"],
+  colors: ["Light Blue"],
+  images: { "Light Blue": "ripped.jpg" },
+},
+{
+  id: "p52", name: "Bootcut Jeans", category: "jeans", price: 710,
+  ageGroups: ["adults"], sizes: ["M", "L", "XL"],
+  colors: ["Dark Blue"],
+  images: { "Dark Blue": "bc.jpg" },
+},
+{
+  id: "p53", name: "Kids Jeans", category: "jeans", price: 380,
+  ageGroups: ["kids"], sizes: ["S", "M"],
+  colors: ["Blue"],
+  images: { "Blue": "kj.jpg" },
+},
+{
+  id: "p54", name: "Baggy lightblue Jeans", category: "jeans", price: 690,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Light blue"],
+  images: { "Lightblue": "baggy.jpg" },
+},
+{
+  id: "p55", name: "Baggy Pants", category: "jeans", price: 730,
+  ageGroups: ["adults"], sizes: ["M", "L", "XL"],
+  colors: ["Grey", "Black"],
+  images: { "Grey": "baggy1.jpg", "Black": "baggy2.jpg" },
+},
+{
+  id: "p56", name: "Denim Shorts", category: "jeans", price: 480,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Light Blue", "Black"],
+  images: { "Light Blue": "denim1.jpg", "Black": "denim2.jpg" },
+},
 
   // Sneakers
   {
@@ -149,6 +309,48 @@ const PRODUCTS = [
     colors: ["White"], bestSeller: true,
     images: { "White": "download.avif" },
   },
+  {
+  id: "p57", name: "Nike Shoes", category: "sneakers", price: 1250,
+  ageGroups: ["youth", "adults"], sizes: ["39", "40", "41", "42", "43"],
+  colors: ["Black", "White"],
+  images: { "Black": "black.jpg", "White": "white.jpg" },
+},
+{
+  id: "p58", name: "Nike Air Jordan Sneakers", category: "sneakers", price: 1400,
+  ageGroups: ["teens", "youth"], sizes: ["38", "39", "40", "41", "42"],
+  colors: ["Black"],
+  images: { "Black": "reto1.jpg"},
+},
+{
+  id: "p59", name: "Slip-On Sneakers", category: "sneakers", price: 950,
+  ageGroups: ["adults"], sizes: ["40", "41", "42", "43"],
+  colors: ["Black", "White"],
+  images: { "Black": "slip1.jpg", "White": "slip2.jpg" },
+},
+{
+  id: "p60", name: "Canvas Sneakers", category: "sneakers", price: 780,
+  ageGroups: ["teens", "youth"], sizes: ["38", "39", "40", "41", "42"],
+  colors: ["White", "Red"],
+  images: { "White": "can1.jpg", "Red": "can2.jpg" },
+},
+{
+  id: "p61", name: "Kids adidas Sneakers", category: "sneakers", price: 590,
+  ageGroups: ["kids"], sizes: ["28", "29", "30", "31"],
+  colors: ["Blue", "Pink"],
+  images: { "Blue": "blue.jpg", "Pink": "pink.jpg" },
+},
+{
+  id: "p62", name: "Adidas Superstar Sneakers", category: "sneakers", price: 1300,
+  ageGroups: ["youth", "adults"], sizes: ["39", "40", "41", "42", "43"],
+  colors: ["White"],
+  images: { "White": "super1.jpg" },
+},
+{
+  id: "p63", name: "Adidas Samba Sneakers", category: "sneakers", price: 1550,
+  ageGroups: ["adults"], sizes: ["40", "41", "42", "43"],
+  colors: [ "White","Black"],
+  images: {"White": "samba1.jpg", "Black": "samba2.jpg"  },
+},
 
   // Football Jerseys
   {
@@ -167,8 +369,53 @@ const PRODUCTS = [
     id: "p21", name: "Adidas Al Ahly T-Shrit", category: "football", price: 890,
     ageGroups: ["youth", "adults"], sizes: ["S", "M", "L", "XL"],
     colors: ["Home", "Away"],
-    images: { "Home": "images (12).jpg", "Away": " images (23).jpg" },
+    images: { "Home": "images (12).jpg", "Away": "ahlyaway.jpg " },
   },
+  {
+  id: "p64", name: "Nike Barcelona T-Shirt - 26/27", category: "football", price: 620,
+  ageGroups: ["teens", "youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Home", "Away"],
+  images: { "Home": "barcahome.jpg", "Away": "barcaaway.jpg" },
+},
+{
+  id: "p70", name: "Adidas Liverpool T-Shirt", category: "football", price: 1050,
+  ageGroups: ["youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Home", "Away"],
+  images: { "Home": "pool1.jpg", "Away": "pool2.jpg" },
+},
+{
+  id: "p68", name: "Nike PSG T-Shrit", category: "football", price: 980,
+  ageGroups: ["teens", "youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Home", "Away"],
+  images: { "Home": "psghome.jpg", "Away": "psgaway.jpg" },
+},
+{
+  id: "p67", name: "Third kit Al Ahly - 26/27", category: "football", price: 900,
+  ageGroups: ["youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Away"],
+  images: { "Away": "images (23).jpg" },
+},
+{
+  id: "p65", name: "El Zamalek T-Shirt", category: "football", price: 780,
+  ageGroups: ["youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Home", "Away"],
+  images: { "Home": "zamalekhome.jpg", "Away": "zamalekaway.jpg" },
+},
+{
+  id: "p66", name: "Nike Tottenham T-Shirt", category: "football", price: 520,
+  ageGroups: ["teens", "youth", "adults"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Home", "Away"],
+  images: { "Home": "tothome.jpg", "Away": "totaway.jpg" },
+},
+
+
+{
+  id: "p69", name: "Puma Portugal Kits ", category: "football", price: 420,
+  ageGroups: ["teens", "youth"], sizes: ["S", "M", "L", "XL"],
+  colors: ["Home", "Away"],
+  images: { "Home": "cr1.jpg", "Away": "cr2.jpg" },
+},
+
 ];
 
 const AGE_LABELS = {
@@ -194,6 +441,9 @@ const COLOR_LABELS = {
   "Away": { en: "Away Kit", ar: "طقم الزيارة" },
   "Navy": { en: "Navy", ar: "كحلي" },
   "Khaki": { en: "Khaki", ar: "كاكي" },
+  "Brown": { en: "Brown", ar: "بني" },
+  "Multi": { en: "Multicolor", ar: "متعدد الألوان" },
+  "Pink": { en: "Pink", ar: "وردي" },
 };
 
 /* ---------- UI text (interface chrome only, product names stay as-is) ---------- */
@@ -216,11 +466,13 @@ const TRANSLATIONS = {
 
   shopTitle:        { en: "Choose your category", ar: "اختار قسمك" },
   filterAll:        { en: "All", ar: "الكل" },
+  allCategories:    { en: "All categories", ar: "كل الأقسام" },
   ageNotePrefix:    { en: "You're seeing items suited for", ar: "بتشوف حاجات مناسبة لفئة" },
-  changeGroup:      { en: "Change group", ar: "غير الفئة" },
+  changeGroup:      { en: "Change group", ar: "غيّر الفئة" },
   emptyTitle:       { en: "No products here yet", ar: "مفيش منتجات هنا دلوقتي" },
   emptyText:        { en: "Try another category or change your age group.", ar: "جرب تختار قسم تاني أو تغيّر الفئة العمرية." },
   bestSeller:       { en: "Best Seller", ar: "الأكتر مبيعًا" },
+  searchPlaceholder:{ en: "Search products...", ar: "دور على منتج..." },
 
   productNotFound:  { en: "Product not found", ar: "المنتج مش موجود" },
   backToShop:       { en: "Back to shop", ar: "ارجع لصفحة التسوق" },
@@ -231,6 +483,14 @@ const TRANSLATIONS = {
   addToCart:        { en: "Add to cart", ar: "ضيف للسلة" },
   selectSizeFirst:  { en: "Please select a size first", ar: "اختار المقاس الأول" },
   addedSuccess:     { en: "Added to cart ✓", ar: "اتضاف للسلة ✓" },
+
+  showcaseTitle:    { en: "Trending Right Now", ar: "الأكتر رواجًا دلوقتي" },
+  showcaseLink:     { en: "View all", ar: "شوف الكل" },
+  lookbookTag:      { en: "New Season", ar: "الموسم الجديد" },
+  lookbookTitle:    { en: "Styled For Every Moment", ar: "لوك مناسب لكل لحظة" },
+  contactTitle:     { en: "Get in Touch", ar: "تواصل معنا" },
+  contactSub:       { en: "Questions about an order? We're one message away.", ar: "عندك سؤال عن أوردر؟ إحنا على بعد رسالة واحدة." },
+  whatsappCta:      { en: "Chat on WhatsApp", ar: "كلمنا على واتساب" },
 
   cartTitle:        { en: "Shopping Cart", ar: "سلة الشراء" },
   cartSub:          { en: "Review your order and choose how you'll receive it.", ar: "راجع طلبك، واختار تستلمه إزاي." },
@@ -293,6 +553,10 @@ function applyLanguage() {
     const key = el.dataset.i18n;
     if (TRANSLATIONS[key]) el.textContent = TRANSLATIONS[key][lang];
   });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    const key = el.dataset.i18nPlaceholder;
+    if (TRANSLATIONS[key]) el.placeholder = TRANSLATIONS[key][lang];
+  });
 
   const langBtn = document.getElementById("langToggle");
   if (langBtn) langBtn.textContent = lang === "ar" ? "EN" : "AR";
@@ -318,7 +582,9 @@ function applyTheme() {
 /* ---------- Category / age / color helpers (UI labels) ---------- */
 function getCategoryLabel(id) {
   const cat = CATEGORIES.find((c) => c.id === id);
-  return cat ? t(cat) : id;
+  if (cat) return t(cat);
+  if (id === "all") return TRANSLATIONS.filterAll[getLang()];
+  return id;
 }
 function getAgeLabel(key) {
   return AGE_LABELS[key] ? t(AGE_LABELS[key]) : key;
@@ -400,6 +666,86 @@ function generateOrderId() {
   let code = "";
   for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
   return "ORD-" + code;
+}
+
+/* ---------- Shared logic for single-category pages ---------- */
+function renderCategoryPage(categoryId) {
+  const grid = document.getElementById("productGrid");
+  const ageNote = document.getElementById("ageNote");
+  const titleEl = document.getElementById("categoryTitle");
+  const searchInput = document.getElementById("searchInput");
+  let searchTerm = searchInput ? searchInput.value.trim() : "";
+
+  function renderAgeNote() {
+    const ageGroup = getAgeGroup();
+    ageNote.innerHTML = "";
+    if (!ageGroup) return;
+    ageNote.append(`${TRANSLATIONS.ageNotePrefix[getLang()]} "${getAgeLabel(ageGroup)}". `);
+    const changeLink = document.createElement("a");
+    changeLink.href = "index.html";
+    changeLink.style.color = "var(--tag)";
+    changeLink.textContent = TRANSLATIONS.changeGroup[getLang()];
+    ageNote.appendChild(changeLink);
+  }
+
+  function getVisibleProducts() {
+    const ageGroup = getAgeGroup();
+    return PRODUCTS.filter((p) => {
+      const matchesAge = !ageGroup || p.ageGroups.includes(ageGroup);
+      const matchesCat = categoryId === "all" || p.category === categoryId;
+      const matchesSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesAge && matchesCat && matchesSearch;
+    });
+  }
+
+  function renderGrid() {
+    const items = getVisibleProducts();
+    grid.innerHTML = "";
+
+    if (items.length === 0) {
+      grid.style.display = "block";
+      grid.innerHTML = `
+        <div class="empty-state">
+          <div class="headline">${TRANSLATIONS.emptyTitle[getLang()]}</div>
+          <p>${TRANSLATIONS.emptyText[getLang()]}</p>
+        </div>`;
+      return;
+    }
+
+    grid.style.display = "grid";
+    items.forEach((p) => {
+      const thumbImage = getProductImage(p, p.colors[0]);
+      const card = document.createElement("a");
+      card.href = `product.html?id=${p.id}`;
+      card.className = "product-card";
+      card.style.position = "relative";
+      card.innerHTML = `
+        ${p.bestSeller ? `<span class="badge-best">${TRANSLATIONS.bestSeller[getLang()]}</span>` : ""}
+        <img class="product-thumb" src="${thumbImage}" alt="${p.name}">
+        <div class="product-info">
+          <div class="cat-label">${getCategoryLabel(p.category)}</div>
+          <h3>${p.name}</h3>
+          <div class="price">${p.price} EGP</div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  function renderAll() {
+    if (titleEl && categoryId !== "all") titleEl.textContent = getCategoryLabel(categoryId);
+    renderAgeNote();
+    renderGrid();
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      searchTerm = e.target.value.trim();
+      renderGrid();
+    });
+  }
+
+  document.addEventListener("app:languagechange", renderAll);
+  renderAll();
 }
 
 /* ---------- Shared UI wiring ---------- */

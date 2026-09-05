@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jackets - The Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="topnav">
+    <a href="index.html" class="brand"><span class="hole"></span> <span data-i18n="brand">The Store</span></a>
+    <div class="nav-links">
+      <a href="categories.html" data-i18n="navShop">Shop</a>
+      <a href="cart.html" class="cart-link"><span data-i18n="navCart">Cart</span> <span class="count">0</span></a>
+      <button id="langToggle" class="icon-btn">EN</button>
+      <button id="themeToggle" class="icon-btn">☀</button>
+    </div>
+  </nav>
+
+  <div class="page-head">
+    <div>
+      <a href="categories.html" class="showcase-link" data-i18n="allCategories" style="display:inline-block; margin-bottom:0.6rem;">All categories</a>
+      <h2 class="headline" id="categoryTitle">Jackets</h2>
+      <p class="sub" id="ageNote"></p>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Search products...">
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+
+  <footer data-i18n="footer">The Store — Training / portfolio project</footer>
+
+  <script src="script.js"></script>
+  <script>
+    renderCategoryPage("hoodies");
+  </script>
+</body>
+</html>

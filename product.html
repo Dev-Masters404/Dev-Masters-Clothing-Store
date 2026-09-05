@@ -26,129 +26,129 @@
 
   <script src="script.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
-    const product = getProductById(productId);
-    const root = document.getElementById("productRoot");
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+const product = getProductById(productId);
+const root = document.getElementById("productRoot");
 
-    let selectedSize = null;
-    let selectedColor = null;
-    let qty = 1;
+let selectedSize = null;
+let selectedColor = null;
+let qty = 1;
 
-    function renderProduct() {
-      if (!product) {
-        root.innerHTML = `
-          <div class="empty-state">
-            <div class="headline">${TRANSLATIONS.productNotFound[getLang()]}</div>
-            <p><a href="categories.html" style="color:var(--tag)">${TRANSLATIONS.backToShop[getLang()]}</a></p>
-          </div>`;
-        return;
-      }
+function renderProduct() {
+  if (!product) {
+    root.innerHTML = `
+      <div class="empty-state">
+        <div class="headline">${TRANSLATIONS.productNotFound[getLang()]}</div>
+        <p><a href="categories.html" style="color:var(--tag)">${TRANSLATIONS.backToShop[getLang()]}</a></p>
+      </div>`;
+    return;
+  }
 
-      if (!selectedColor) selectedColor = product.colors[0];
+  if (!selectedColor) selectedColor = product.colors[0];
 
-      root.innerHTML = `
-        <div class="product-detail">
-          <div class="detail-visual">
-            <div class="image-scroll" id="imageScroll">
-              ${product.colors.map((c) => `
-                <div class="scroll-item">
-                  <img src="${getProductImage(product, c)}" alt="${product.name} - ${c}">
-                </div>`).join("")}
-            </div>
-            <div class="scroll-dots">
-              ${product.colors.map((c) => `<span class="dot ${c === selectedColor ? "active" : ""}"></span>`).join("")}
-            </div>
+  root.innerHTML = `
+    <div class="product-detail">
+      <div class="detail-visual">
+        <div class="image-scroll" id="imageScroll">
+          ${product.colors.map((c) => `
+            <div class="scroll-item">
+              <img src="${getProductImage(product, c)}" alt="${product.name} - ${c}">
+            </div>`).join("")}
+        </div>
+        <div class="scroll-dots">
+          ${product.colors.map((c) => `<span class="dot ${c === selectedColor ? "active" : ""}"></span>`).join("")}
+        </div>
+      </div>
+      <div class="detail-info">
+        <div class="cat-label">${getCategoryLabel(product.category)}</div>
+        <h1 class="headline">${product.name}</h1>
+        <div class="price">${product.price} EGP</div>
+        <p class="desc">${TRANSLATIONS.productDesc[getLang()]}</p>
+
+        <div class="size-block">
+          <div class="label">${TRANSLATIONS.chooseSize[getLang()]}</div>
+          <div class="size-options" id="sizeOptions">
+            ${product.sizes.map((s) => `<button class="size-btn ${selectedSize === s ? "selected" : ""}" data-size="${s}">${s}</button>`).join("")}
           </div>
-          <div class="detail-info">
-            <div class="cat-label">${getCategoryLabel(product.category)}</div>
-            <h1 class="headline">${product.name}</h1>
-            <div class="price">${product.price} EGP</div>
-            <p class="desc">${TRANSLATIONS.productDesc[getLang()]}</p>
+        </div>
 
-            <div class="size-block">
-              <div class="label">${TRANSLATIONS.chooseSize[getLang()]}</div>
-              <div class="size-options" id="sizeOptions">
-                ${product.sizes.map((s) => `<button class="size-btn ${selectedSize === s ? "selected" : ""}" data-size="${s}">${s}</button>`).join("")}
-              </div>
-            </div>
-
-            <div class="size-block">
-              <div class="label">${TRANSLATIONS.chooseColor[getLang()]}</div>
-              <div class="size-options" id="colorOptions">
-                ${product.colors.map((c) => `<button class="size-btn color-btn ${selectedColor === c ? "selected" : ""}" data-color="${c}">${getColorLabel(c)}</button>`).join("")}
-              </div>
-            </div>
-
-            <div class="qty-block">
-              <span class="label">${TRANSLATIONS.quantity[getLang()]}</span>
-              <div class="qty-control">
-                <button id="qtyMinus" type="button">−</button>
-                <span id="qtyValue">${qty}</span>
-                <button id="qtyPlus" type="button">+</button>
-              </div>
-            </div>
-
-            <button class="btn-primary" id="addToCartBtn">${TRANSLATIONS.addToCart[getLang()]}</button>
-            <div class="form-note" id="formNote"></div>
+        <div class="size-block">
+          <div class="label">${TRANSLATIONS.chooseColor[getLang()]}</div>
+          <div class="size-options" id="colorOptions">
+            ${product.colors.map((c) => `<button class="size-btn color-btn ${selectedColor === c ? "selected" : ""}" data-color="${c}">${getColorLabel(c)}</button>`).join("")}
           </div>
-        </div>`;
+        </div>
 
-      const scrollEl = document.getElementById("imageScroll");
-      const colorIndex = product.colors.indexOf(selectedColor);
-      requestAnimationFrame(() => {
-        const targetItem = scrollEl.children[colorIndex];
-        if (targetItem){
-            targetItem.scrollIntoView({behavior: "smooth", inline:"start", block:"nearest"});
-        }
-      });
+        <div class="qty-block">
+          <span class="label">${TRANSLATIONS.quantity[getLang()]}</span>
+          <div class="qty-control">
+            <button id="qtyMinus" type="button">−</button>
+            <span id="qtyValue">${qty}</span>
+            <button id="qtyPlus" type="button">+</button>
+          </div>
+        </div>
 
-      const sizeOptions = document.getElementById("sizeOptions");
-      const colorOptions = document.getElementById("colorOptions");
-      const qtyValue = document.getElementById("qtyValue");
-      const formNote = document.getElementById("formNote");
-      const addBtn = document.getElementById("addToCartBtn");
+        <button class="btn-primary" id="addToCartBtn">${TRANSLATIONS.addToCart[getLang()]}</button>
+        <div class="form-note" id="formNote"></div>
+      </div>
+    </div>`;
 
-      sizeOptions.addEventListener("click", (e) => {
-        const btn = e.target.closest(".size-btn");
-        if (!btn) return;
-        selectedSize = btn.dataset.size;
-        formNote.textContent = "";
-        renderProduct();
-      });
-
-      colorOptions.addEventListener("click", (e) => {
-        const btn = e.target.closest(".color-btn");
-        if (!btn) return;
-        selectedColor = btn.dataset.color;
-        formNote.textContent = "";
-        renderProduct();
-      });
-
-      document.getElementById("qtyMinus").addEventListener("click", () => {
-        qty = Math.max(1, qty - 1);
-        qtyValue.textContent = qty;
-      });
-      document.getElementById("qtyPlus").addEventListener("click", () => {
-        qty += 1;
-        qtyValue.textContent = qty;
-      });
-
-      addBtn.addEventListener("click", () => {
-        if (!selectedSize) {
-          formNote.textContent = TRANSLATIONS.selectSizeFirst[getLang()];
-          formNote.classList.remove("success");
-          return;
-        }
-        addToCart(product.id, selectedSize, selectedColor, qty);
-        renderCartBadge();
-        formNote.textContent = TRANSLATIONS.addedSuccess[getLang()];
-        formNote.classList.add("success");
-      });
+  const scrollEl = document.getElementById("imageScroll");
+  const colorIndex = product.colors.indexOf(selectedColor);
+  requestAnimationFrame(() => {
+    const targetItem = scrollEl.children[colorIndex];
+    if (targetItem) {
+      targetItem.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
     }
+  });
 
-    document.addEventListener("app:languagechange", renderProduct);
+  const sizeOptions = document.getElementById("sizeOptions");
+  const colorOptions = document.getElementById("colorOptions");
+  const qtyValue = document.getElementById("qtyValue");
+  const formNote = document.getElementById("formNote");
+  const addBtn = document.getElementById("addToCartBtn");
+
+  sizeOptions.addEventListener("click", (e) => {
+    const btn = e.target.closest(".size-btn");
+    if (!btn) return;
+    selectedSize = btn.dataset.size;
+    formNote.textContent = "";
     renderProduct();
+  });
+
+  colorOptions.addEventListener("click", (e) => {
+    const btn = e.target.closest(".color-btn");
+    if (!btn) return;
+    selectedColor = btn.dataset.color;
+    formNote.textContent = "";
+    renderProduct();
+  });
+
+  document.getElementById("qtyMinus").addEventListener("click", () => {
+    qty = Math.max(1, qty - 1);
+    qtyValue.textContent = qty;
+  });
+  document.getElementById("qtyPlus").addEventListener("click", () => {
+    qty += 1;
+    qtyValue.textContent = qty;
+  });
+
+  addBtn.addEventListener("click", () => {
+    if (!selectedSize) {
+      formNote.textContent = TRANSLATIONS.selectSizeFirst[getLang()];
+      formNote.classList.remove("success");
+      return;
+    }
+    addToCart(product.id, selectedSize, selectedColor, qty);
+    renderCartBadge();
+    formNote.textContent = TRANSLATIONS.addedSuccess[getLang()];
+    formNote.classList.add("success");
+  });
+}
+
+document.addEventListener("app:languagechange", renderProduct);
+renderProduct();
   </script>
 </body>
 </html>

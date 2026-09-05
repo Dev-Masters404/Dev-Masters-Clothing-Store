@@ -33,24 +33,89 @@
     </div>
   </section>
 
+  <section class="home-showcase">
+    <div class="showcase-head">
+      <h2 class="headline" data-i18n="showcaseTitle">Trending Right Now</h2>
+      <a href="categories.html" class="showcase-link" data-i18n="showcaseLink">View all</a>
+    </div>
+    <div class="showcase-grid" id="showcaseGrid"></div>
+  </section>
+
+  <section class="lookbook">
+    <div class="lookbook-head">
+      <span class="tag-mark"><span class="hole"></span> <span data-i18n="lookbookTag">New Season</span></span>
+      <h2 class="headline" data-i18n="lookbookTitle">Styled For Every Moment</h2>
+    </div>
+    <div class="lookbook-grid">
+      <div class="lookbook-item lookbook-main">
+        <img src="mohamadreza-khashay-xwMYVKN14Ok-unsplash.jpg" alt="Lookbook">
+      </div>
+     
+      <div class="lookbook-item">
+        <img src="dwayne-joe-yad8QcBssbg-unsplash.jpg" alt="Lookbook">
+      </div>
+
+       <div class="lookbook-item">
+        <img src="tobias-tullius-Fg15LdqpWrs-unsplash.jpg" alt="Lookbook">
+      </div>
+    </div>
+  </section> 
+
+  <section class="contact-section">
+    <h2 class="headline" data-i18n="contactTitle">Get in Touch</h2>
+    <p data-i18n="contactSub">Questions about an order? We're one message away.</p>
+
+    <a href="https://wa.me/201015263209" target="_blank" class="whatsapp-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.36c1.36.71 2.9 1.11 4.62 1.11 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.71 13.71c-.24.68-1.4 1.3-1.94 1.36-.5.06-1.09.09-3.32-.69-2.8-.98-4.61-3.83-4.75-4-.14-.18-1.14-1.52-1.14-2.9 0-1.37.72-2.04.97-2.32.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.24.58.81 2 .88 2.14.07.14.12.31.02.5-.1.18-.15.29-.29.45-.15.16-.3.36-.44.48-.14.13-.29.27-.13.53.17.27.75 1.24 1.61 2.01 1.11 1 2.04 1.31 2.31 1.46.27.14.43.12.59-.05.16-.17.68-.79.86-1.06.18-.27.36-.22.6-.13.25.09 1.58.75 1.85.88.27.14.45.2.51.32.07.12.07.68-.17 1.36z"/></svg>
+      <span data-i18n="whatsappCta">Chat on WhatsApp</span>
+    </a>
+
+    <div class="social-icons">
+      <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+      </a>
+      <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+    </div>
+  </section>
+
   <footer data-i18n="footer">The Store — Training / portfolio project</footer>
 
   <script src="script.js"></script>
   <script>
     const agePicker = document.getElementById("agePicker");
 
-    const currentAge = getAgeGroup();
-    if (currentAge) {
-      const activeBtn = agePicker.querySelector(`[data-age="${currentAge}"]`);
-      if (activeBtn) activeBtn.classList.add("active");
-    }
+const currentAge = getAgeGroup();
+if (currentAge) {
+  const activeBtn = agePicker.querySelector(`[data-age="${currentAge}"]`);
+  if (activeBtn) activeBtn.classList.add("active");
+}
 
-    agePicker.addEventListener("click", (e) => {
-      const btn = e.target.closest(".age-chip");
-      if (!btn) return;
-      setAgeGroup(btn.dataset.age);
-      window.location.href = "categories.html";
-    });
+agePicker.addEventListener("click", (e) => {
+  const btn = e.target.closest(".age-chip");
+  if (!btn) return;
+  setAgeGroup(btn.dataset.age);
+  window.location.href = "categories.html";
+});
+
+function renderShowcase() {
+  const grid = document.getElementById("showcaseGrid");
+  const featured = PRODUCTS.filter((p) => p.bestSeller).slice(0, 6);
+  grid.innerHTML = featured.map((p) => {
+    const img = getProductImage(p, p.colors[0]);
+    return `
+      <a href="product.html?id=${p.id}" class="showcase-card">
+        <img src="${img}" alt="${p.name}">
+        <div class="showcase-info">
+          <span>${p.name}</span>
+          <span class="showcase-price">${p.price} EGP</span>
+        </div>
+      </a>`;
+  }).join("");
+}
+renderShowcase();
+document.addEventListener("app:languagechange", renderShowcase);
   </script>
 </body>
 </html>

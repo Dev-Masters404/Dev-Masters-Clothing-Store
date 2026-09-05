@@ -34,193 +34,193 @@
   <script src="script.js"></script>
   <script>
     const root = document.getElementById("cartRoot");
-    let fulfillment = "delivery";
-    let paymentMethod = "cash";
-    let orderPlaced = false;
-    let placedOrder = null;
+let fulfillment = "delivery";
+let paymentMethod = "cash";
+let orderPlaced = false;
+let placedOrder = null;
 
-    const DELIVERY_FEE = 30;
+const DELIVERY_FEE = 30;
 
-    function getFinalTotal() {
-      return cartTotal() + (fulfillment === "delivery" ? DELIVERY_FEE : 0);
-    }
+function getFinalTotal() {
+  return cartTotal() + (fulfillment === "delivery" ? DELIVERY_FEE : 0);
+}
 
-    function renderCart() {
-      const cart = getCart();
-      const lang = getLang();
+function renderCart() {
+  const cart = getCart();
+  const lang = getLang();
 
-      if (cart.length === 0 && !orderPlaced) {
-        root.innerHTML = `
-          <div class="empty-cart">
-            <div class="headline" style="font-size:1.4rem; margin-bottom:0.6rem;">${TRANSLATIONS.cartEmptyTitle[lang]}</div>
-            <p>${TRANSLATIONS.cartEmptyText[lang]} <a href="categories.html" style="color:var(--tag)">${TRANSLATIONS.startShopping[lang]}</a></p>
-          </div>`;
+  if (cart.length === 0 && !orderPlaced) {
+    root.innerHTML = `
+      <div class="empty-cart">
+        <div class="headline" style="font-size:1.4rem; margin-bottom:0.6rem;">${TRANSLATIONS.cartEmptyTitle[lang]}</div>
+        <p>${TRANSLATIONS.cartEmptyText[lang]} <a href="categories.html" style="color:var(--tag)">${TRANSLATIONS.startShopping[lang]}</a></p>
+      </div>`;
+    return;
+  }
+
+  const lines = cart.map((item) => {
+    const product = getProductById(item.productId);
+    if (!product) return "";
+    return `
+      <div class="cart-row" data-line="${item.lineId}">
+        <img class="thumb" src="${getProductImage(product, item.color)}" alt="${product.name}">
+        <div class="meta">
+          <h4>${product.name}</h4>
+          <div class="line">${TRANSLATIONS.size[lang]} ${item.size} · ${TRANSLATIONS.color[lang]} ${getColorLabel(item.color)} · ${TRANSLATIONS.qty[lang]} ${item.qty}</div>
+        </div>
+        <div class="actions">
+          <div class="price">${product.price * item.qty} EGP</div>
+          <button class="remove-btn" data-remove="${item.lineId}" title="remove">✕</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  root.innerHTML = `
+    <div class="cart-wrap">
+      <div class="cart-items" id="cartItems">${lines}</div>
+
+      <div class="summary-box">
+        <h3>${TRANSLATIONS.orderSummary[lang]}</h3>
+        <div class="summary-row"><span>${TRANSLATIONS.items[lang]}</span><span>${cartCount()}</span></div>
+        <div class="summary-row"><span>${TRANSLATIONS.subtotal[lang]}</span><span>${cartTotal()} EGP</span></div>
+        <div class="summary-row">
+          <span>${TRANSLATIONS.deliveryFee[lang]}</span>
+          <span>${fulfillment === "delivery" ? DELIVERY_FEE + " EGP" : TRANSLATIONS.free[lang]}</span>
+        </div>
+        <div class="summary-row total"><span>${TRANSLATIONS.total[lang]}</span><span>${getFinalTotal()} EGP</span></div>
+
+        <div class="fulfillment-choice">
+          <button type="button" class="fulfillment-btn ${fulfillment === "delivery" ? "active" : ""}" data-mode="delivery">${TRANSLATIONS.delivery[lang]}</button>
+          <button type="button" class="fulfillment-btn ${fulfillment === "pickup" ? "active" : ""}" data-mode="pickup">${TRANSLATIONS.pickup[lang]}</button>
+        </div>
+
+        <div class="fulfillment-choice">
+          <button type="button" class="fulfillment-btn ${paymentMethod === "cash" ? "active" : ""}" data-payment="cash">${TRANSLATIONS.cash[lang]}</button>
+          <button type="button" class="fulfillment-btn ${paymentMethod === "card" ? "active" : ""}" data-payment="card">${TRANSLATIONS.card[lang]}</button>
+        </div>
+
+        ${orderPlaced ? "" : `
+        <form id="checkoutForm">
+          <div class="field">
+            <label>${TRANSLATIONS.nameField[lang]}</label>
+            <input type="text" id="custName" required>
+          </div>
+          <div class="field">
+            <label>${TRANSLATIONS.phoneField[lang]}</label>
+            <input type="tel" id="custPhone" required>
+          </div>
+          <div class="field ${fulfillment === "pickup" ? "hidden" : ""}" id="addressField">
+            <label>${TRANSLATIONS.addressField[lang]}</label>
+            <textarea id="custAddress" rows="2"></textarea>
+          </div>
+          ${paymentMethod === "card" ? `
+          <div class="field">
+            <label>${TRANSLATIONS.cardNumber[lang]}</label>
+            <input type="text" id="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000">
+          </div>
+          <div style="display:flex; gap:0.8rem;">
+            <div class="field" style="flex:1;">
+              <label>${TRANSLATIONS.cardExpiry[lang]}</label>
+              <input type="text" id="cardExpiry" maxlength="5" placeholder="MM/YY">
+            </div>
+            <div class="field" style="flex:1;">
+              <label>${TRANSLATIONS.cardCvv[lang]}</label>
+              <input type="text" id="cardCvv" maxlength="3" placeholder="•••">
+            </div>
+          </div>` : ""}
+          <button type="submit" class="btn-primary">${TRANSLATIONS.confirmOrder[lang]}</button>
+          <div class="form-note" id="checkoutNote"></div>
+        </form>`}
+
+        <div id="orderConfirm">
+          ${placedOrder ? `
+            <div class="order-confirm">
+              <div>${placedOrder.fulfillment === "pickup" ? TRANSLATIONS.pickupCodeTitle[lang] : TRANSLATIONS.orderCodeTitle[lang]}</div>
+              <div class="code">${placedOrder.orderId}</div>
+              <p>${placedOrder.fulfillment === "pickup" ? TRANSLATIONS.pickupNote[lang] : TRANSLATIONS.deliveryNote[lang]}</p>
+            </div>` : ""}
+        </div>
+      </div>
+    </div>`;
+
+  const cartItems = document.getElementById("cartItems");
+  if (cartItems) {
+    cartItems.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-remove]");
+      if (!btn) return;
+      removeFromCart(btn.dataset.remove);
+      renderCartBadge();
+      renderCart();
+    });
+  }
+
+  document.querySelectorAll("[data-mode]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      fulfillment = btn.dataset.mode;
+      renderCart();
+    });
+  });
+
+  document.querySelectorAll("[data-payment]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      paymentMethod = btn.dataset.payment;
+      renderCart();
+    });
+  });
+
+  const form = document.getElementById("checkoutForm");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("custName").value.trim();
+      const phone = document.getElementById("custPhone").value.trim();
+      const address = document.getElementById("custAddress").value.trim();
+      const note = document.getElementById("checkoutNote");
+
+      if (!name || !phone) {
+        note.textContent = TRANSLATIONS.fillNamePhone[lang];
+        return;
+      }
+      if (fulfillment === "delivery" && !address) {
+        note.textContent = TRANSLATIONS.needAddress[lang];
         return;
       }
 
-      const lines = cart.map((item) => {
-        const product = getProductById(item.productId);
-        if (!product) return "";
-        return `
-          <div class="cart-row" data-line="${item.lineId}">
-            <img class="thumb" src="${getProductImage(product, item.color)}" alt="${product.name}">
-            <div class="meta">
-              <h4>${product.name}</h4>
-              <div class="line">${TRANSLATIONS.size[lang]} ${item.size} · ${TRANSLATIONS.color[lang]} ${getColorLabel(item.color)} · ${TRANSLATIONS.qty[lang]} ${item.qty}</div>
-            </div>
-            <div class="actions">
-              <div class="price">${product.price * item.qty} EGP</div>
-              <button class="remove-btn" data-remove="${item.lineId}" title="remove">✕</button>
-            </div>
-          </div>`;
-      }).join("");
-
-      root.innerHTML = `
-        <div class="cart-wrap">
-          <div class="cart-items" id="cartItems">${lines}</div>
-
-          <div class="summary-box">
-            <h3>${TRANSLATIONS.orderSummary[lang]}</h3>
-            <div class="summary-row"><span>${TRANSLATIONS.items[lang]}</span><span>${cartCount()}</span></div>
-            <div class="summary-row"><span>${TRANSLATIONS.subtotal[lang]}</span><span>${cartTotal()} EGP</span></div>
-            <div class="summary-row">
-              <span>${TRANSLATIONS.deliveryFee[lang]}</span>
-              <span>${fulfillment === "delivery" ? DELIVERY_FEE + " EGP" : TRANSLATIONS.free[lang]}</span>
-            </div>
-            <div class="summary-row total"><span>${TRANSLATIONS.total[lang]}</span><span>${getFinalTotal()} EGP</span></div>
-
-            <div class="fulfillment-choice">
-              <button type="button" class="fulfillment-btn ${fulfillment === "delivery" ? "active" : ""}" data-mode="delivery">${TRANSLATIONS.delivery[lang]}</button>
-              <button type="button" class="fulfillment-btn ${fulfillment === "pickup" ? "active" : ""}" data-mode="pickup">${TRANSLATIONS.pickup[lang]}</button>
-            </div>
-
-            <div class="fulfillment-choice">
-              <button type="button" class="fulfillment-btn ${paymentMethod === "cash" ? "active" : ""}" data-payment="cash">${TRANSLATIONS.cash[lang]}</button>
-              <button type="button" class="fulfillment-btn ${paymentMethod === "card" ? "active" : ""}" data-payment="card">${TRANSLATIONS.card[lang]}</button>
-            </div>
-
-            ${orderPlaced ? "" : `
-            <form id="checkoutForm">
-              <div class="field">
-                <label>${TRANSLATIONS.nameField[lang]}</label>
-                <input type="text" id="custName" required>
-              </div>
-              <div class="field">
-                <label>${TRANSLATIONS.phoneField[lang]}</label>
-                <input type="tel" id="custPhone" required>
-              </div>
-              <div class="field ${fulfillment === "pickup" ? "hidden" : ""}" id="addressField">
-                <label>${TRANSLATIONS.addressField[lang]}</label>
-                <textarea id="custAddress" rows="2"></textarea>
-              </div>
-              ${paymentMethod === "card" ? `
-              <div class="field">
-                <label>${TRANSLATIONS.cardNumber[lang]}</label>
-                <input type="text" id="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000">
-              </div>
-              <div style="display:flex; gap:0.8rem;">
-                <div class="field" style="flex:1;">
-                  <label>${TRANSLATIONS.cardExpiry[lang]}</label>
-                  <input type="text" id="cardExpiry" maxlength="5" placeholder="MM/YY">
-                </div>
-                <div class="field" style="flex:1;">
-                  <label>${TRANSLATIONS.cardCvv[lang]}</label>
-                  <input type="text" id="cardCvv" maxlength="3" placeholder="•••">
-                </div>
-              </div>` : ""}
-              <button type="submit" class="btn-primary">${TRANSLATIONS.confirmOrder[lang]}</button>
-              <div class="form-note" id="checkoutNote"></div>
-            </form>`}
-
-            <div id="orderConfirm">
-              ${placedOrder ? `
-                <div class="order-confirm">
-                  <div>${placedOrder.fulfillment === "pickup" ? TRANSLATIONS.pickupCodeTitle[lang] : TRANSLATIONS.orderCodeTitle[lang]}</div>
-                  <div class="code">${placedOrder.orderId}</div>
-                  <p>${placedOrder.fulfillment === "pickup" ? TRANSLATIONS.pickupNote[lang] : TRANSLATIONS.deliveryNote[lang]}</p>
-                </div>` : ""}
-            </div>
-          </div>
-        </div>`;
-
-      const cartItems = document.getElementById("cartItems");
-      if (cartItems) {
-        cartItems.addEventListener("click", (e) => {
-          const btn = e.target.closest("[data-remove]");
-          if (!btn) return;
-          removeFromCart(btn.dataset.remove);
-          renderCartBadge();
-          renderCart();
-        });
+      let cardNumber = "";
+      if (paymentMethod === "card") {
+        cardNumber = document.getElementById("cardNumber").value.trim();
+        const cardExpiry = document.getElementById("cardExpiry").value.trim();
+        const cardCvv = document.getElementById("cardCvv").value.trim();
+        if (!cardNumber || !cardExpiry || !cardCvv) {
+          note.textContent = TRANSLATIONS.fillCardDetails[lang];
+          return;
+        }
       }
 
-      document.querySelectorAll("[data-mode]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          fulfillment = btn.dataset.mode;
-          renderCart();
-        });
-      });
+      const orderId = generateOrderId();
+      placedOrder = {
+        orderId, name, phone,
+        address: fulfillment === "delivery" ? address : null,
+        fulfillment,
+        paymentMethod,
+        cardLast4: paymentMethod === "card" ? cardNumber.replace(/\s/g, "").slice(-4) : null,
+        items: getCart(),
+        subtotal: cartTotal(),
+        deliveryFee: fulfillment === "delivery" ? DELIVERY_FEE : 0,
+        total: getFinalTotal(),
+        createdAt: new Date().toISOString(),
+      };
+      localStorage.setItem("lastOrder", JSON.stringify(placedOrder));
+      orderPlaced = true;
+      saveCart([]);
+      renderCartBadge();
+      renderCart();
+    });
+  }
+}
 
-      document.querySelectorAll("[data-payment]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          paymentMethod = btn.dataset.payment;
-          renderCart();
-        });
-      });
-
-      const form = document.getElementById("checkoutForm");
-      if (form) {
-        form.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const name = document.getElementById("custName").value.trim();
-          const phone = document.getElementById("custPhone").value.trim();
-          const address = document.getElementById("custAddress").value.trim();
-          const note = document.getElementById("checkoutNote");
-
-          if (!name || !phone) {
-            note.textContent = TRANSLATIONS.fillNamePhone[lang];
-            return;
-          }
-          if (fulfillment === "delivery" && !address) {
-            note.textContent = TRANSLATIONS.needAddress[lang];
-            return;
-          }
-
-          let cardNumber = "";
-          if (paymentMethod === "card") {
-            cardNumber = document.getElementById("cardNumber").value.trim();
-            const cardExpiry = document.getElementById("cardExpiry").value.trim();
-            const cardCvv = document.getElementById("cardCvv").value.trim();
-            if (!cardNumber || !cardExpiry || !cardCvv) {
-              note.textContent = TRANSLATIONS.fillCardDetails[lang];
-              return;
-            }
-          }
-
-          const orderId = generateOrderId();
-          placedOrder = {
-            orderId, name, phone,
-            address: fulfillment === "delivery" ? address : null,
-            fulfillment,
-            paymentMethod,
-            cardLast4: paymentMethod === "card" ? cardNumber.replace(/\s/g, "").slice(-4) : null,
-            items: getCart(),
-            subtotal: cartTotal(),
-            deliveryFee: fulfillment === "delivery" ? DELIVERY_FEE : 0,
-            total: getFinalTotal(),
-            createdAt: new Date().toISOString(),
-          };
-          localStorage.setItem("lastOrder", JSON.stringify(placedOrder));
-          orderPlaced = true;
-          saveCart([]);
-          renderCartBadge();
-          renderCart();
-        });
-      }
-    }
-
-    document.addEventListener("app:languagechange", renderCart);
-    renderCart();
+document.addEventListener("app:languagechange", renderCart);
+renderCart();
   </script>
 </body>
 </html>
